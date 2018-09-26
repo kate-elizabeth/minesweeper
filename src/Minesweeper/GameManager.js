@@ -1,19 +1,65 @@
 import React, {Component} from 'react';
 import GameStateBuilder from './GameState/GameStateBuilder';
+import StarterGameBoard from './GameBoard/StarterGameBoard';
+import InProgressGameBoard from './GameBoard/InProgressGameBoard';
+import FinishedGameBoard from './GameBoard/FinishedGameBoard';
+
+
+
+var GAME_STATUS = {
+    INTRO: 'INTRO',
+    INPROGRESS: 'INPROGRESS',
+    LOST: 'LOST',
+    WON: 'WON',
+}
 
 class GameManager extends Component {
     constructor(props){
         super(props);
+        this.gameStateBuilder = GameStateBuilder();
+        let {bombs, rows, columns} = this.props;
+        this.state = {
+            gameStatus: GAME_STATUS.INPROGRESS,
+            board: this.gameStateBuilder.buildStarterGameBoard(rows, columns),
+            bombs: bombs,
+            rows: rows,
+            columns: columns,
+        }
     }
 
-    componentDidMount = () => {
-        
+    handleFirstClick = (i, j) => {
+        this.setState({
+            board: this.gameStateBuilder.buildNewGame(this.rows, this.columns, this.bombs, i, j),
+            gameStatus: GAME_STATUS.INPROGRESS,
+        })
+    }
+
+    handleNumberCellClick = (i, j) => {
+        console.log(`cell at {i} and {j} clicked!`);
+    }
+
+    handleBombCellClick = (i, j) => {
+        console.log(`Bomb cell clicked! at ${i} ${j}`);
+    }
+
+    handleEmptyCellClick = (i, j) => {
+        console.log(`Empty cell clicked at ${i} ${j}`);
     }
 
     render(){
-        return (
-            <div></div>
-        );
+        let {gameStatus, board} = this.state;
+        switch(gameStatus){
+            case GAME_STATUS.INTRO:
+                return <StarterGameBoard board={board} onCellClick={this.handleFirstClick}/>               
+            case GAME_STATUS.INPROGRESS:
+                return <InProgressGameBoard board={board} 
+                            onBombCellClick={this.handleBombCellClick}
+                            onNumberCellClick={this.handleNumberCellClick}
+                            onEmptyCellClick={this.handleEmptyCellClick}
+                             />
+            default:
+                return <FinishedGameBoard board={board} />
+        }
     }
 
 }

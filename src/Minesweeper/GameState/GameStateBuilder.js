@@ -1,116 +1,59 @@
+import GameMinesweeper from './Game';
 
 function gameStateBuilder() {
+    var Game = GameMinesweeper();
 
-     function buildNewGame(rows, columns, bombs){
-        
-        console.log(`Building New Game with ${rows} rows, ${columns} columns, and ${bombs} bombs`);
-        
+    function buildStarterGameBoard(rows, columns){
         const board = new Array(rows);
         for(let i = 0; i < rows; i++){
             board[i] = new Array(columns);
             
             for(let j = 0; j < columns; j++){
                 board[i][j] = buildNonBombGameCell(i, j, 0, false);
-            }
-            
+            }       
         }
+        return board;
+    }
+
+    function buildNewGame(rows, columns, bombs, offLimitsI, offLimitsJ){
+        console.log(`Building New Game with ${rows} rows, ${columns} columns, and ${bombs} bombs`);
+       
+        const board = buildStarterGameBoard(rows, columns);
 
         //place the bombs
         for(let i = getRandomIndex(rows), j = getRandomIndex(columns); 
-                bombs > 0; i = getRandomIndex(rows), j = getRandomIndex(columns)){
-            if(!isBombGameCell(board[i][j])){
-                board[i][j] = buildBombGameCell(i, j, false);
-                bombs -= 1;
-            }
+            bombs > 0; i = getRandomIndex(rows), j = getRandomIndex(columns)){
+                if(i !== offLimitsI && j !== offLimitsJ){
+                    if(!Game.isBombGameCell(board[i][j])){
+                        board[i][j] = buildBombGameCell(i, j, false);
+                        bombs -= 1;
+                    }
+                }
         }
 
         //count neighboring bombs
         for(let i = 0; i < rows; i++){
             for(let j = 0; j < columns; j++){
-                if(!isBombGameCell(board[i][j])){
+                if(!Game.isBombGameCell(board[i][j])){
                     let sum = 0;
-                    getCellNeighborsByIndex(board, i, j).forEach( elem => {
-                        if(isBombGameCell(elem)){
+                    Game.getCellNeighborsByIndex(board, i, j).forEach( elem => {
+                        if(Game.isBombGameCell(elem)){
                             sum += 1;
                         }
                     });
-                    board[i][j] = buildNonBombGameCell(i, j, sum, false);
+                    if(i === offLimitsI && j === offLimitsJ){
+                        board[i][j] = buildNonBombGameCell(i, j, sum, true);
+                    }else{
+                        board[i][j] = buildNonBombGameCell(i, j, sum, false);
+                    }             
                 }         
             }
         }
 
-        printBoard(board);
+        Game.printBoard(board);
 
         return board;
     };
-
-
-
-    function getCellNeighbors(board, cell){
-        return getCellNeighborsByIndex(board, cell.row, cell.colum);
-    }
-
-    function getCellNeighborsByIndex(board, row, column){
-        let ret = [];
-        if(!isRowMinEdge(row)){
-            ret.push(board[row - 1][column]);
-            if(!isColumnMinEdge(column)){
-                ret.push(board[row - 1][column - 1]);
-            }
-            if(!isColumnMaxEdge(board, column)){
-                ret.push(board[row - 1][column + 1]);
-            }
-        }
-        if(!isRowMaxEdge(board, row)){
-            ret.push(board[row + 1][column]);
-            if(!isColumnMinEdge(column)){
-                ret.push(board[row + 1][column - 1]);
-            }
-            if(!isColumnMaxEdge(board, column)){
-                ret.push(board[row + 1][column + 1])
-            }
-        }
-        if(!isColumnMinEdge(column)){
-            ret.push(board[row][column - 1]);
-        }
-        if(!isColumnMaxEdge(board, column)){
-            ret.push(board[row][column + 1]);
-        }
-
-        return ret;
-    }
-
-    function isRowMinEdge(row){
-        return row === 0;
-    }
-
-    function isColumnMinEdge(column){
-        return column === 0;
-    }
-
-    function isColumnMaxEdge(board, column){
-        if(board[0]){
-            return column === (board[0].length - 1);
-        }else return true;     
-    }
-
-    function isRowMaxEdge(board, row){
-        if(board[0]){
-            return row === (board.length - 1);
-        }else return true;       
-    }
-    
-    function printBoard(board){
-        let rowVals = board.map(row => {
-            let vals = row.map(elem => {
-                if(isBombGameCell(elem)){
-                    return 'B';
-                }else return elem.value;
-            });
-            return "[" + vals.join(" ") + "]";
-        });
-        console.log(rowVals.join('\n'));
-    }
 
     /**
      * @param {*} val zero-based
@@ -119,11 +62,6 @@ function gameStateBuilder() {
         return Math.floor(Math.random() * val);
     };
 
-    function isBombGameCell(cell){
-        if(cell){
-            return cell.value < 0;
-        }else return false;
-    }
 
     function buildNonBombGameCell(row, column, numOfBombNeighbors, isClicked){
         return buildGameCell(row, column, numOfBombNeighbors, isClicked);
@@ -149,7 +87,8 @@ function gameStateBuilder() {
     }
 
     return {
-        buildNewGame : buildNewGame,
+        buildNewGame: buildNewGame,
+        buildStarterGameBoard: buildStarterGameBoard,
     };
 }
 

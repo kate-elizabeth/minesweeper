@@ -10,8 +10,8 @@ class GameSettingsInput extends Component{
             rows: 15,
             columns: 25,
             onSubmit: onSubmit,
-            min: 10,
-            max: 100,
+            min: 5,
+            max: 50,
         }
     }
 

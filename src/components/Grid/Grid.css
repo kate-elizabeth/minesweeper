@@ -1,0 +1,13 @@
+:local(.container) {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    /**background-color: #2196F3; **/
+    padding: 1em;
+  }
+
+:local(.item) {
+    /**border: 1px solid rgba(0, 0, 0, 0.8);**/
+    padding: 1em;
+    font-size: 1em;
+    text-align: center;
+}

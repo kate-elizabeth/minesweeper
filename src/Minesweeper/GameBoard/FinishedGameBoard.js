@@ -2,10 +2,14 @@ import React from 'react';
 import GameBoard from './GameBoard';
 
 function FinishedGameBoard(props){
+    const {board} = props;
     return (
         <div>
-            <p>Finished</p>
-            <GameBoard />
+            <GameBoard onBombCellClick={() => {}}
+                        onEmptyCellClick={() => {}}
+                        onNumberCellClick={() => {}}
+                        board={board}
+            />
         </div>
     );
 }

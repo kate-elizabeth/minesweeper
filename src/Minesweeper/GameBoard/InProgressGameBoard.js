@@ -3,10 +3,14 @@ import GameBoard from './GameBoard';
 
 
 function InProgressGameBoard(props){
+    const {board, onBombCellClick, onEmptyCellClick, onNumberCellClick} = props;
     return (
         <div>
-            <p>InProgress</p>
-            <GameBoard />
+            <GameBoard onBombCellClick={onBombCellClick}
+                        onEmptyCellClick={onEmptyCellClick}
+                        onNumberCellClick={onNumberCellClick}
+                        board={board}
+            />
         </div>
     );
 }

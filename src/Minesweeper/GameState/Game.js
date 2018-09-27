@@ -85,12 +85,26 @@ function Game(){
         }else return false;
     }
 
+    function isNumberGameCell(cell){
+        if(cell){
+            return cell.value > 0;
+        }else return false;
+    }
+
+    function isEmptyGameCell(cell){
+        if(cell){
+            return cell.value === 0;
+        }else return false;
+    }
+
     return {
         getCellNeighborsByIndex: getCellNeighborsByIndex,
         printBoard: printBoard,
         verifyBombCount: verifyBombCount,
         stringifyBoard: stringifyBoard,
         isBombGameCell: isBombGameCell,
+        isNumberGameCell: isNumberGameCell,
+        isEmptyGameCell: isEmptyGameCell,
     };
 }
 

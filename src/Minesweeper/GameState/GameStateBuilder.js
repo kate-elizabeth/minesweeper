@@ -18,18 +18,10 @@ function gameStateBuilder() {
     function buildNewGame(rows, columns, bombs, offLimitsI, offLimitsJ){
         console.log(`Building New Game with ${rows} rows, ${columns} columns, and ${bombs} bombs`);
        
-        const board = buildStarterGameBoard(rows, columns);
+        let board = buildStarterGameBoard(rows, columns);
 
-        //place the bombs
-        for(let i = getRandomIndex(rows), j = getRandomIndex(columns); 
-            bombs > 0; i = getRandomIndex(rows), j = getRandomIndex(columns)){
-                if(i !== offLimitsI && j !== offLimitsJ){
-                    if(!Game.isBombGameCell(board[i][j])){
-                        board[i][j] = buildBombGameCell(i, j, false);
-                        bombs -= 1;
-                    }
-                }
-        }
+        //randomly place the bombs
+        board = randomlyPlaceBombs(board, rows, columns, bombs, offLimitsI, offLimitsJ);
 
         //count neighboring bombs
         for(let i = 0; i < rows; i++){
@@ -55,13 +47,69 @@ function gameStateBuilder() {
         return board;
     };
 
-    /**
-     * @param {*} val zero-based
-     */
-    function getRandomIndex(val){
-        return Math.floor(Math.random() * val);
-    };
+    function randomlyPlaceBombs(board, rows, columns, bombs, offLimitsI, offLimitsJ){
+        let bombableCellIndices = getNextBombableCellOptions(rows, columns, offLimitsI, offLimitsJ);
+        let current;
+        while(bombs > 0){
+            current = bombableCellIndices.pop();
+            if(!Game.isBombGameCell(board[current.row][current.column])){
+                board[current.row][current.column] = buildBombGameCell(current.row, current.column, false);
+                bombs -= 1;
+            }
+            if(bombableCellIndices.length === 0){
+                bombableCellIndices = getNextBombableCellOptions(rows, columns, offLimitsI, offLimitsJ);
+            }
+        }
+        return board;
+    }
 
+    function getNextBombableCellOptions(rows, columns, offLimitsI, offLimitsJ){
+        var ret = [];
+        ret.push({
+            row: getBombableIndex(rows - 1, offLimitsI),
+            column: getBombableIndex(columns - 1, offLimitsJ),
+        });
+        ret.push({
+            row: getRandomIndex(0, rows - 1),
+            column: getBombableIndex(columns - 1, offLimitsJ),
+        });
+        ret.push({
+            row: getBombableIndex(rows - 1, offLimitsI),
+            column: getRandomIndex(0, columns - 1),
+        });
+        return ret;
+    }
+
+    /**
+     * Randomly and efficiently choose an index that avoids the 
+     * offlimits indices and their neighbors 
+     * @param {*} max 
+     * @param {*} offLimits 
+     */
+    function getBombableIndex(max, offLimits){
+        const indexOptions = []; 
+        let choice;    
+        if((offLimits - 2) >= 0){
+            indexOptions.push(getRandomIndex(0, offLimits - 2));
+        }
+        if((offLimits + 2) <= max){
+            indexOptions.push(getRandomIndex(offLimits + 2, max));
+        }
+        choice = indexOptions[getRandomIndex(0, indexOptions.length - 1)];
+        //console.log(`Bombable index between offlimits ${offLimits} and max ${max} : ${choice}`);
+        return choice;  
+    }
+
+    /**
+     * 
+     * @param {*} min <int> inclusive
+     * @param {*} max <int> inclusive
+     */
+    function getRandomIndex(min, max){
+        const rand = (Math.floor(Math.random() * (max - min + 1)) + min);
+        //console.log(`Rand: ${rand} with min ${min} and max ${max}`);
+        return rand;
+    };
 
     function buildNonBombGameCell(row, column, numOfBombNeighbors, isClicked){
         return buildGameCell(row, column, numOfBombNeighbors, isClicked);

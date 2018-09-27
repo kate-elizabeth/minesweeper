@@ -41,7 +41,7 @@ class GameSettingsInput extends Component{
     render(){
         const {min, max} = this.state;
         return (
-                <div className={styles.gamesettings}>
+                <div className={`${styles.gamesettings} ${styles.panel}`}>
                     <h2 className={styles.gametitle}>Hello!</h2>
                     <div className={styles.panel}>
                         <p>Please select the board dimensions for your game.</p>
@@ -57,7 +57,7 @@ class GameSettingsInput extends Component{
                                     value={this.state.columns} step="5" min={min} max={max}
                                     onChange={this.onColumnChange}/>
                         </label>
-                        <p>(Min value is 10 and Max value is 100 for either)</p>
+                        <p>{`(Min value is ${min} and Max value is ${max} for either)`}</p>
                     </div>
                     <div className={styles.panel}>
                         <button className={styles.button} onClick={this.handleSubmit}>Start Game!</button>

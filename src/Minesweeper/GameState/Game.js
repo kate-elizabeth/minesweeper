@@ -133,7 +133,7 @@ function Game(){
     function findRandomCell(board, testFunc){
 
         let randCell, randRow, filteredRow = [];
-        while(filteredRow.length == 0){
+        while(filteredRow.length === 0){
             randRow = board[getRandomIndex(0, board.length-1)];
             filteredRow = randRow.filter((elem) => {
                 return testFunc(elem);

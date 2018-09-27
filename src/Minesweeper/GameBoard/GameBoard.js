@@ -1,6 +1,8 @@
 import React from 'react';
 import Game from '../GameState/Game';
-import GameCell from './GameCell';
+import BombGameCell from './BombGameCell';
+import NumberGameCell from './NumberGameCell';
+import EmptyGameCell from './EmptyGameCell';
 
 import styles from './styles.css';
 
@@ -20,12 +22,12 @@ function GameBoard(props){
                             <tr key={i}>
                                 {row.map((cell, j) => {
                                     if(game.isBombGameCell(cell, j)){
-                                        return <GameCell key={j} data={cell} onClick={onBombCellClick}/>
+                                        return <BombGameCell key={j} data={cell} onClick={onBombCellClick}/>
                                     }
                                     if(game.isNumberGameCell(cell)){
-                                        return <GameCell key={j} data={cell} onClick={onNumberCellClick} />
+                                        return <NumberGameCell key={j} data={cell} onClick={onNumberCellClick} />
                                     }else{
-                                        return <GameCell key={j} data={cell} onClick={onEmptyCellClick} />
+                                        return <EmptyGameCell key={j} data={cell} onClick={onEmptyCellClick} />
                                     }
                                 })}
                             </tr>

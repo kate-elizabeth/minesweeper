@@ -8,9 +8,6 @@ class GameCell extends Component {
         this.cellStyles = CellStyles();
     }
 
-    componentDidMount = () => {
-    }
-
     onCellClick = (event) => {
         const {onClick, data} = this.props;
         onClick(data.row, data.column);
@@ -22,7 +19,7 @@ class GameCell extends Component {
     }
 
     render(){
-        const {data} = this.props;
+        const {data, children} = this.props;
         var style = `${styles.gamecell}`;
         if(data.value >= 0){
             style += ` ${this.cellStyles[data.value]}`;
@@ -30,9 +27,7 @@ class GameCell extends Component {
         return (
             <td>
                 {(data.isClicked) ?  <button className={style} disabled={true} onClick={this.onCellClick}>
-                                        {(data.value >= 0) ? data.value 
-                                            : <i className={`fas fa-bomb ${styles.bomb}`}></i>
-                                        }
+                                        {children}
                                     </button>
                                 : <button className={`${styles.gamecell} ${styles.unclickedgamecell}`} onClick={this.onCellClick}></button>}
             

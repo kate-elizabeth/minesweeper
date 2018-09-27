@@ -8,10 +8,12 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Play Minesweeper!</h1>
+          <p className="App-title">Minesweeper</p>
         </header>
-        <div>
-          <MinesweeperGame />
+        <div className="App-body">
+          <div className="Game-Container">
+            <MinesweeperGame />
+          </div>
         </div>
       </div>
     );

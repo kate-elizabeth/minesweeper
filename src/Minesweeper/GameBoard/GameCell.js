@@ -1,5 +1,5 @@
 import React from 'react';
-
+import styles from './styles.css';
 
 function GameCell(props){
     const {onClick, data} = props;
@@ -11,7 +11,7 @@ function GameCell(props){
 
     return (
         <td>
-            <button onClick={onCellClick}>{data.value}</button>
+            <button className={styles.gamecell} onClick={onCellClick}>{data.value}</button>
         </td>
     );
 }

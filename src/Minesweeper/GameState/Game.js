@@ -1,12 +1,10 @@
 
 function Game(){
-    function getCellNeighbors(board, cell){
-        return getCellNeighborsByIndex(board, cell.row, cell.colum);
-    }
 
     function gameWon(rows, columns, bombs, numCells){
+        console.log(`${rows} ${columns} ${bombs} ${numCells}`);
         let totalCells = rows*columns;
-        return ((totalCells - bombs) == numCells);
+        return ((totalCells - bombs) === numCells);
     }
 
     function getCellNeighborsByIndex(board, row, column){

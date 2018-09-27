@@ -129,25 +129,30 @@ function gameStateBuilder() {
     }
 
     function updateBoardForClickedEmptyCell(board, row, column){
-        let cellsUpdated = 1;
+        let neighbors = [] ; let indicesSeen; 
         board[row][column] = buildClickedGameCell(board, row, column);
-        let indicesSeen = new Set(); //items will be stored as strings "i-j"
-        let neighbors = Game.getCellNeighborsByIndex(board, row, column);
+        indicesSeen = new Set(); //items will be stored as strings "i-j"
+        indicesSeen.add(Game.buildIndexKey(row, column));
+        neighbors = addUnseenNeighbors(neighbors, indicesSeen, board, row, column);
         while(neighbors.length > 0){
             let cell = neighbors.pop();
+
             //add its indices to the set
-            indicesSeen.add(Game.buildIndexKey(cell.row, cell.column));
+            let key = Game.buildIndexKey(cell.row, cell.column);
+            indicesSeen.add(key);
+            
             //if is an empty cell, add its neighbors
             if(Game.isEmptyGameCell(cell)){
                 neighbors = addUnseenNeighbors(neighbors, indicesSeen, board, cell.row, cell.column);
             }
+
             //if it is a number cell, only update it
             board[cell.row][cell.column] = buildClickedGameCell(board, cell.row, cell.column);
-            cellsUpdated += 1;
         }
+
         return {
             board: board,
-            cellsUpdated: cellsUpdated,
+            cellsUpdated: indicesSeen.size,
         }
     }
 
@@ -202,8 +207,6 @@ function gameStateBuilder() {
         updateBoardForClickedEmptyCell: updateBoardForClickedEmptyCell,
     };
 }
-
-
 
 
 export default gameStateBuilder;

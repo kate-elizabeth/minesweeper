@@ -57,6 +57,7 @@ class GameManager extends Component {
 
     updateGame = (board, cellsUpdated, status) => {
         const {totalCellsRevealed, rows, columns, bombs} = this.state;
+        console.log(`cellsUpdated: ${cellsUpdated} totalCellsRevealed ${totalCellsRevealed}`);
         cellsUpdated += totalCellsRevealed;
         if(this.game.gameWon(rows, columns, bombs, cellsUpdated)){
             this.setState({

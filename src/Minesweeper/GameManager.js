@@ -32,7 +32,7 @@ class GameManager extends Component {
     handleSettingsSubmit = (rows, columns) => {
         let bombs = Math.floor((rows * columns)/3);
         let board = this.gameStateBuilder.buildStarterGameBoard(rows, columns);
-        console.log(`${rows} ${columns}`)
+        //console.log(`${rows} ${columns}`)
         this.setState({
             gameStatus: GAME_STATUS.INTRO,
             board: board,
@@ -50,14 +50,14 @@ class GameManager extends Component {
     }
 
     handleNumberCellClick = (i, j) => {
-        console.log(`cell at ${i} and ${j} clicked!`);
+        //console.log(`cell at ${i} and ${j} clicked!`);
         let {board, cellsUpdated } = this.gameStateBuilder.updateBoardForClickedGameCell(this.state.board, i, j);
         this.updateGame(board, cellsUpdated, GAME_STATUS.INPROGRESS);
     }
 
     updateGame = (board, cellsUpdated, status) => {
         const {totalCellsRevealed, rows, columns, bombs} = this.state;
-        console.log(`cellsUpdated: ${cellsUpdated} totalCellsRevealed ${totalCellsRevealed}`);
+        //console.log(`cellsUpdated: ${cellsUpdated} totalCellsRevealed ${totalCellsRevealed}`);
         cellsUpdated += totalCellsRevealed;
         if(this.game.gameWon(rows, columns, bombs, cellsUpdated)){
             this.setState({
@@ -75,7 +75,7 @@ class GameManager extends Component {
     };
 
     handleBombCellClick = (i, j) => {
-        console.log(`Bomb cell clicked! at ${i} ${j}`);
+        //console.log(`Bomb cell clicked! at ${i} ${j}`);
         //first update to show the clicked bomb before the rest
         this.handleNumberCellClick(i,j);
         const {board} = this.gameStateBuilder.updateBoardForClickedBomb(this.state.board);
@@ -86,7 +86,7 @@ class GameManager extends Component {
     }
 
     handleEmptyCellClick = (i, j) => {
-        console.log(`Empty cell clicked at ${i} ${j}`);
+        //console.log(`Empty cell clicked at ${i} ${j}`);
         const {board, cellsUpdated} = this.gameStateBuilder.updateBoardForClickedEmptyCell(this.state.board, i, j);
         this.updateGame(board, cellsUpdated, GAME_STATUS.INPROGRESS);
     }

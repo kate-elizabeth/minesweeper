@@ -3,7 +3,7 @@
 function Game(){
 
     function gameWon(rows, columns, bombs, numCells){
-        console.log(`${rows} ${columns} ${bombs} ${numCells}`);
+        //console.log(`${rows} ${columns} ${bombs} ${numCells}`);
         let totalCells = rows*columns;
         return ((totalCells - bombs) === numCells);
     }

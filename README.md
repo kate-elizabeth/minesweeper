@@ -56,12 +56,12 @@ An individual cell object stores this data:
 }
 ```
 
-Notably, the value represents "what sort of cell" it is
+Notably, the value represents "what sort of cell" it is:
 
 ```
 -1  :    "a Bomb Cell"
-0   :    "A Empty Cell" has zero Bomb neighbors, so when its clicked, it's                   neighbors need to recursively be revealed till get to a neighbors that             are touching a bomb ("Number Cell"s)
-1-8 :    "A Number Cell" has 1-8 Bomb Cell neighbors, when it's clicked, it simply          shows its number N of bomb neighbors   
+0   :    "A Empty Cell" has zero Bomb neighbors, so when its clicked, it's neighbors need to recursively be revealed till get to a neighbors that are touching a bomb ("Number Cell"s)
+1-8 :    "A Number Cell" has 1-8 Bomb Cell neighbors, when it's clicked, it simply shows its number N of bomb neighbors   
 
 ```
 
@@ -88,7 +88,7 @@ They each return an object that looks as such:
 ```
 boardData = {
     board: board    // <arr[arr[Cell Object]]>
-    cellsUpdated:   // <int> represents the number of cells that were revealed                          during this update. This is used for checking for                          game end (winning state), as well as error                                 checking in testing
+    cellsUpdated:   // <int> represents the number of cells that were revealed during this update. This is used for checking for game end (winning state), as well as error checking in testing
 }
 ```
 

@@ -24,7 +24,7 @@
     font-size: 1em;
 }
 
-:local(.text){
+:local(.message){
     font-family: 'Roboto', sans-serif;
 }
 

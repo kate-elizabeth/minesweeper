@@ -29,11 +29,11 @@ class GameManager extends Component {
 
     handleFirstClick = (i, j) => {
         let board = this.gameStateBuilder.buildNewGame(this.state.rows, this.state.columns, this.state.bombs, i, j);
+        board = this.gameStateBuilder.updateBoardForClickedEmptyCell(board, i, j);
         this.setState({
             board: board,
             gameStatus: GAME_STATUS.INPROGRESS,
         })
-        //this.handleEmptyCellClick(i,j);
     }
 
     handleNumberCellClick = (i, j) => {

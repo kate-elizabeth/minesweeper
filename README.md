@@ -58,12 +58,11 @@ An individual cell object stores this data:
 
 Notably, the value represents "what sort of cell" it is:
 
-```
--1  :    "a Bomb Cell"
-0   :    "A Empty Cell" has zero Bomb neighbors, so when its clicked, it's neighbors need to recursively be revealed till get to a neighbors that are touching a bomb ("Number Cell"s)
-1-8 :    "A Number Cell" has 1-8 Bomb Cell neighbors, when it's clicked, it simply shows its number N of bomb neighbors   
 
-```
+#### -1  :    "a Bomb Cell"
+#### 0   :    "A Empty Cell" has zero Bomb neighbors, so when its clicked, it's neighbors need to recursively be revealed till get to a neighbors that are touching a bomb ("Number Cell"s)
+#### 1-8 :    "A Number Cell" has 1-8 Bomb Cell neighbors, when it's clicked, it simply shows its number N of bomb neighbors   
+
 
 ### Game Manager (React Component):
 Keeper of the current state, but does not contain any logic towards actually modifying the game board.  Currently, this component does handle "game status" logic, ie - what to display when the game is at a certain status (ie 'IN PROGRESS, as well as handling the transitions between game statuses.  Other than this componenet, every other component follows functional programming practices in recognition of best practices, and so appropriately as to avoid state-sillyness bugs
@@ -85,12 +84,12 @@ Just for fun, at this point the console *does* log the answer key, for sneaky pu
 ##### function updateBoardForClickedEmptyCell(board, row, column)
 These are the three means by when the board is updated with each user click.
 They each return an object that looks as such:
-```
-boardData = {
-    board: board    // <arr[arr[Cell Object]]>
-    cellsUpdated:   // <int> represents the number of cells that were revealed during this update. This is used for checking for game end (winning state), as well as error checking in testing
-}
-```
+
+#### boardData = {
+####    board: board    // <arr[arr[Cell Object]]>
+####    cellsUpdated:   // <int> represents the number of cells that were revealed during this update. This is used for checking for game end (winning state), as well as error checking in testing
+#### }
+
 
 Notably, updateBoardForClickedEmptyCell() "recursively" (actually, iteratively to avoid building up the call stack) checks the neighbors of the first empty clicked cell to see if they are also 'empty', if so, adds their neighbors to the list of cells to check, and if not empty (ie must be a 'number' cell), just sets them to be displayed and does not add its' neighbors. 
 
@@ -98,13 +97,13 @@ Notably, updateBoardForClickedEmptyCell() "recursively" (actually, iteratively t
 You might note at this point the "Game" component, that currently is used to compartimentalize calculation-related tedium for things like gathering a cells neighbors or doing the official check for "what sort of cell" a cell is.  I'm not happy with this name, and re-thinking this component in general is a notable to-do.
 
 ## Notable To-Do's
-###Snapshot Testing, DOM Testing
+### Snapshot Testing, DOM Testing
 I currently provide some simplistic testing for the various algorithms, but admittedly the testing portion is a growth point.  I currently haven't had a chance to learn how to do Snapshot testing or real DOM testing, but it's high on my to-do list.
 
-###"Game" Component
+### "Game" Component
 As mentioned earlier, I don't think this is a good name for this component, but I currently am blanking on a better one. Additionally, I'm not really happy with how it is currently accessed across the application and I think it likely needs to be re-thought as a sort of Game-Cell component.
 
-###Place a "Flag" Functionality
+### Place a "Flag" Functionality
 It's useful when playing Minesweeper to be able to place a 'flag' over a cell that you know has a bomb.   
 
 ## Author

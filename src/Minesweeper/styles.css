@@ -24,6 +24,10 @@
     font-size: 1em;
 }
 
+:local(.text){
+    font-family: 'Roboto', sans-serif;
+}
+
 
 
 

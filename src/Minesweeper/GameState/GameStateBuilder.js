@@ -122,10 +122,14 @@ function gameStateBuilder() {
     function updateBoardForClickedGameCell(board, row, column){
         let cell = buildClickedGameCell(board, row, column)
         board[row][column] = cell;
-        return board;
+        return {
+            board: board,
+            cellsUpdated: 1,
+        };
     }
 
     function updateBoardForClickedEmptyCell(board, row, column){
+        let cellsUpdated = 1;
         board[row][column] = buildClickedGameCell(board, row, column);
         let indicesSeen = new Set(); //items will be stored as strings "i-j"
         let neighbors = Game.getCellNeighborsByIndex(board, row, column);
@@ -139,8 +143,12 @@ function gameStateBuilder() {
             }
             //if it is a number cell, only update it
             board[cell.row][cell.column] = buildClickedGameCell(board, cell.row, cell.column);
+            cellsUpdated += 1;
         }
-        return board;
+        return {
+            board: board,
+            cellsUpdated: cellsUpdated,
+        }
     }
 
     function addUnseenNeighbors(neighbors, indicesSeen, board, row, column){

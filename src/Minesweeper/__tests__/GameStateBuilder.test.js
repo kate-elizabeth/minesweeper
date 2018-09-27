@@ -1,8 +1,6 @@
 import GameStateBuilder from '../GameState/GameStateBuilder';
 import Game from '../GameState/Game';
 
-
-
 it('returns a empty board', () => {
     const gameStateBuilder = GameStateBuilder();
     const emptyBoard = gameStateBuilder.buildNewGame(0,0,0);

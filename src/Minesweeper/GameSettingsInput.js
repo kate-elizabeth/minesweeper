@@ -8,7 +8,7 @@ class GameSettingsInput extends Component{
         let {onSubmit} = props;
         this.state = {
             rows: 15,
-            columns: 15,
+            columns: 25,
             onSubmit: onSubmit,
             min: 10,
             max: 100,
@@ -42,7 +42,7 @@ class GameSettingsInput extends Component{
         const {min, max} = this.state;
         return (
                 <div className={styles.gamesettings}>
-                    <h2 className={styles.gametitle}>Welcome!</h2>
+                    <h2 className={styles.gametitle}>Hello!</h2>
                     <div className={styles.panel}>
                         <p>Please select the board dimensions for your game.</p>
                         <label className={styles.item}>

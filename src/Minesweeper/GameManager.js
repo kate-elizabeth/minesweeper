@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import GameStateBuilder from './GameState/GameStateBuilder';
+import Game from './GameState/Game';
 import StarterGameBoard from './GameBoard/StarterGameBoard';
 import InProgressGameBoard from './GameBoard/InProgressGameBoard';
 import FinishedGameBoard from './GameBoard/FinishedGameBoard';
 import GameSettingsInput from './GameSettingsInput';
+import styles from './styles.css';
 
 var GAME_STATUS = {
     PRE: 'PRE',
@@ -17,6 +19,7 @@ class GameManager extends Component {
     constructor(props){
         super(props);
         this.gameStateBuilder = GameStateBuilder();
+        this.game = Game();
         this.state = {
             gameStatus: GAME_STATUS.PRE,
             board: [[]],
@@ -36,23 +39,39 @@ class GameManager extends Component {
             bombs: bombs,
             rows: rows,
             columns: columns,
+            totalCellsRevealed: 0,
         });
     }
 
     handleFirstClick = (i, j) => {
-        let board = this.gameStateBuilder.buildNewGame(this.state.rows, this.state.columns, this.state.bombs, i, j);
-        board = this.gameStateBuilder.updateBoardForClickedEmptyCell(board, i, j);
-        this.setState({
-            board: board,
-            gameStatus: GAME_STATUS.INPROGRESS,
-        })
+        let boardInitial = this.gameStateBuilder.buildNewGame(this.state.rows, this.state.columns, this.state.bombs, i, j);
+        let {board, cellsUpdated} = this.gameStateBuilder.updateBoardForClickedEmptyCell(boardInitial, i, j);
+        this.updateGame(board, cellsUpdated, GAME_STATUS.INPROGRESS);
     }
 
     handleNumberCellClick = (i, j) => {
         console.log(`cell at ${i} and ${j} clicked!`);
-        const board = this.gameStateBuilder.updateBoardForClickedGameCell(this.state.board, i, j);
-        this.setState({board: board});
+        let {board, cellsUpdated } = this.gameStateBuilder.updateBoardForClickedGameCell(this.state.board, i, j);
+        this.updateGame(board, cellsUpdated, GAME_STATUS.INPROGRESS);
     }
+
+    updateGame = (board, cellsUpdated, status) => {
+        const {totalCellsRevealed, rows, columns, bombs} = this.state;
+        cellsUpdated += totalCellsRevealed;
+        if(this.game.gameWon(rows, columns, bombs, cellsUpdated)){
+            this.setState({
+                board: board,
+                totalCellsRevealed: cellsUpdated,
+                gameStatus: GAME_STATUS.WON,
+            });
+        }else{
+            this.setState({
+                board: board,
+                totalCellsRevealed: cellsUpdated,
+                gameStatus: status,
+            });
+        }
+    };
 
     handleBombCellClick = (i, j) => {
         console.log(`Bomb cell clicked! at ${i} ${j}`);
@@ -67,8 +86,8 @@ class GameManager extends Component {
 
     handleEmptyCellClick = (i, j) => {
         console.log(`Empty cell clicked at ${i} ${j}`);
-        const board = this.gameStateBuilder.updateBoardForClickedEmptyCell(this.state.board, i, j);
-        this.setState({board: board});
+        const {board, cellsUpdated} = this.gameStateBuilder.updateBoardForClickedEmptyCell(this.state.board, i, j);
+        this.updateGame(board, cellsUpdated, GAME_STATUS.INPROGRESS);
     }
 
     render(){
@@ -85,8 +104,20 @@ class GameManager extends Component {
                             onNumberCellClick={this.handleNumberCellClick}
                             onEmptyCellClick={this.handleEmptyCellClick}
                              />
+            case GAME_STATUS.WON:
+                return(
+                    <div>
+                        <FinishedGameBoard board={board} />
+                        <p className={styles.message}>OMG Congrats!</p>
+                    </div>
+                );
             default:
-                return <FinishedGameBoard board={board} />
+                return (
+                    <div>
+                        <FinishedGameBoard board={board} />
+                        <p className={styles.message}>Aw, that's a bummer!</p>
+                        <p className={styles.message}>Go again? (hit refresh!)</p>
+                    </div>);
         }
     }
 

@@ -4,6 +4,11 @@ function Game(){
         return getCellNeighborsByIndex(board, cell.row, cell.colum);
     }
 
+    function gameWon(rows, columns, bombs, numCells){
+        let totalCells = rows*columns;
+        return ((totalCells - bombs) == numCells);
+    }
+
     function getCellNeighborsByIndex(board, row, column){
         let ret = [];
         if(!isRowMinEdge(row)){
@@ -110,6 +115,7 @@ function Game(){
         isNumberGameCell: isNumberGameCell,
         isEmptyGameCell: isEmptyGameCell,
         buildIndexKey: buildIndexKey,
+        gameWon: gameWon,
     };
 }
 

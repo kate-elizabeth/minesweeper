@@ -8,6 +8,7 @@ colors {
 
 .App {
   text-align: center;
+  font-family: 'Roboto', sans-serif;
 }
 
 .App-header {
@@ -37,6 +38,8 @@ colors {
 
 .Game-Container{
   display: inline-block;
+  width:100%;
+  height:100%;
 }
 
 .App-intro {

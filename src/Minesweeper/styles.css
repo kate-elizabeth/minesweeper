@@ -1,0 +1,30 @@
+
+:local(.gamesettings){
+    width:50%;
+    background-color:#f50057;
+    color: white;
+    display: inline-block;
+    height: 20em;
+}
+
+:local(.gametitle){
+    letter-spacing: 0.3em;
+}
+
+
+:local(.panel){
+    margin-top:2em;
+}
+
+:local(.item){
+    margin: .5em;
+}
+
+:local(.button){
+    font-size: 1em;
+}
+
+
+
+
+

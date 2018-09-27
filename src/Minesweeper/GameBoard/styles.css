@@ -37,7 +37,7 @@
 
 
 :local(.six){
-    color:  #d500f9;
+    color: #d500f9;
 }
 
 :local(.seven){
@@ -52,6 +52,9 @@
     background-color: #c9d1dd;
 }
 
+:local(.gameboard){
+    display: inline-block;
+}
 
 
 

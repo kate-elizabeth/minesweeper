@@ -34,6 +34,10 @@ function Game(){
         return ret;
     }
 
+    function buildIndexKey(row, column){
+        return `${row}-${column}`;
+    }
+
     function isRowMinEdge(row){
         return row === 0;
     }
@@ -105,6 +109,7 @@ function Game(){
         isBombGameCell: isBombGameCell,
         isNumberGameCell: isNumberGameCell,
         isEmptyGameCell: isEmptyGameCell,
+        buildIndexKey: buildIndexKey,
     };
 }
 

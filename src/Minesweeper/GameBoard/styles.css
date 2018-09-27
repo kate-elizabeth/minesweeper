@@ -1,8 +1,58 @@
 
 :local(.gamecell) {
-    height: 25px;
-    width: 25px;
+    height: 30px;
+    width: 30px;
+    font-weight: bold;
+    font-size: 1em;
+    
 }
+
+:local(.bomb){
+    color: #f50057;
+}
+
+:local(.zero){
+    color: white;
+}
+
+:local(.one){
+    color: #00b0ff;
+}
+
+:local(.two){
+    color: #1de9b6;
+}
+
+:local(.three){
+    color:  #9c27b0 ;
+}
+
+:local(.four){
+    color:#ffc400;
+}
+
+:local(.five){
+    color: #ff3d00;
+}
+
+
+:local(.six){
+    color:  #d500f9;
+}
+
+:local(.seven){
+    color: #ff9100;
+}
+
+:local(.eight){
+    color: #673ab7;
+}
+
+:local(.unclickedgamecell){
+    background-color: #c9d1dd;
+}
+
+
 
 
 

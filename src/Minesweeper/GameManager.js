@@ -28,23 +28,35 @@ class GameManager extends Component {
     }
 
     handleFirstClick = (i, j) => {
-        const board = this.gameStateBuilder.buildNewGame(this.state.rows, this.state.columns, this.state.bombs, i, j);
+        let board = this.gameStateBuilder.buildNewGame(this.state.rows, this.state.columns, this.state.bombs, i, j);
         this.setState({
             board: board,
             gameStatus: GAME_STATUS.INPROGRESS,
         })
+        //this.handleEmptyCellClick(i,j);
     }
 
     handleNumberCellClick = (i, j) => {
         console.log(`cell at ${i} and ${j} clicked!`);
+        const board = this.gameStateBuilder.updateBoardForClickedGameCell(this.state.board, i, j);
+        this.setState({board: board});
     }
 
     handleBombCellClick = (i, j) => {
         console.log(`Bomb cell clicked! at ${i} ${j}`);
+        //first update to show the clicked bomb before the rest
+        this.handleNumberCellClick(i,j);
+        const board = this.gameStateBuilder.updateBoardForClickedBomb(this.state.board);
+        this.setState({
+            board:board,
+            gameStatus: GAME_STATUS.LOST,
+        });
     }
 
     handleEmptyCellClick = (i, j) => {
         console.log(`Empty cell clicked at ${i} ${j}`);
+        const board = this.gameStateBuilder.updateBoardForClickedEmptyCell(this.state.board, i, j);
+        this.setState({board: board});
     }
 
     render(){

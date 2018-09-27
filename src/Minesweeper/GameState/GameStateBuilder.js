@@ -119,6 +119,58 @@ function gameStateBuilder() {
         return buildGameCell(row, column, -1, isClicked);
     }
 
+    function updateBoardForClickedGameCell(board, row, column){
+        let cell = buildClickedGameCell(board, row, column)
+        board[row][column] = cell;
+        return board;
+    }
+
+    function updateBoardForClickedEmptyCell(board, row, column){
+        board[row][column] = buildClickedGameCell(board, row, column);
+        let indicesSeen = new Set(); //items will be stored as strings "i-j"
+        let neighbors = Game.getCellNeighborsByIndex(board, row, column);
+        while(neighbors.length > 0){
+            let cell = neighbors.pop();
+            //add its indices to the set
+            indicesSeen.add(Game.buildIndexKey(cell.row, cell.column));
+            //if is an empty cell, add its neighbors
+            if(Game.isEmptyGameCell(cell)){
+                neighbors = addUnseenNeighbors(neighbors, indicesSeen, board, cell.row, cell.column);
+            }
+            //if it is a number cell, only update it
+            board[cell.row][cell.column] = buildClickedGameCell(board, cell.row, cell.column);
+        }
+        return board;
+    }
+
+    function addUnseenNeighbors(neighbors, indicesSeen, board, row, column){
+        const currentNeighbors = Game.getCellNeighborsByIndex(board, row, column);
+        currentNeighbors.forEach((neighbor) => {
+            let key = Game.buildIndexKey(neighbor.row, neighbor.column);
+            if(!indicesSeen.has(key)){
+                indicesSeen.add(key);
+                neighbors.push(neighbor);
+            }
+        });
+        return neighbors;
+    }
+
+    function updateBoardForClickedBomb(board){
+        board.forEach((rowArr, i) => {
+            rowArr.forEach((elem, j) => {
+                if(Game.isBombGameCell(elem)){
+                    board[i][j] = buildClickedGameCell(board, i, j);
+                }
+            });
+        });
+        return board;
+    }
+
+    function buildClickedGameCell(board, row, column){
+        let cell = board[row][column];
+        return {...cell, isClicked: true};
+    }
+
     /**
      * @param {-1, 1-8, 0} value indicates whether it is:
      *  a bomb: -1,
@@ -137,6 +189,9 @@ function gameStateBuilder() {
     return {
         buildNewGame: buildNewGame,
         buildStarterGameBoard: buildStarterGameBoard,
+        updateBoardForClickedGameCell: updateBoardForClickedGameCell,
+        updateBoardForClickedBomb: updateBoardForClickedBomb,
+        updateBoardForClickedEmptyCell: updateBoardForClickedEmptyCell,
     };
 }
 

@@ -1,4 +1,5 @@
 
+
 function Game(){
 
     function gameWon(rows, columns, bombs, numCells){
@@ -65,21 +66,13 @@ function Game(){
         let rowVals = board.map(row => {
             let vals = row.map(elem => {
                 if(isBombGameCell(elem)){
-                    return 'B';
-                }else return elem.value;
+                    return `B-${elem.isClicked ? 1 : 0}`;
+                }else return `${elem.value}-${elem.isClicked ? 1 : 0}`;
             });
             return "[" + vals.join(" ") + "]";
         });
         rowVals = rowVals.join('\n');
         return rowVals;
-    }
-
-    function verifyBombCount(board, num){
-        let boardStr = stringifyBoard(board);
-        let matches = boardStr.match(/B/g);
-        if(matches){
-            return matches.length === num
-        }else return num === 0;
     }
     
     function printBoard(board){
@@ -104,16 +97,79 @@ function Game(){
         }else return false;
     }
 
+    function verifyBombCount(board, num){
+        return verifyCellCount(board, /B/g, num);
+    }
+
+    function verifyClickedCellCount(board, num){
+        return verifyCellCount(board, /-1/g, num);      
+    }
+
+    function verifyClickedBombCount(board, num){
+        return verifyCellCount(board, /B-1/g, num )
+    }
+
+    function verifyCellCount(board, regex, num){
+        let boardStr = stringifyBoard(board);
+        let matches = boardStr.match(regex);
+        if(matches){
+            return matches.length === num
+        }else return num === 0;        
+    }
+
+    function findRandomNumberCell(board){
+        return findRandomCell(board, isNumberGameCell);
+    }
+
+    function findRandomBombCell(board){
+        return findRandomCell(board, isBombGameCell);
+    }
+
+    /**
+     * 
+     * @param {*} board 
+     * @param {*} testFunc isNumberGameCell | isBombGameCell | isEmptyGameCell
+     */
+    function findRandomCell(board, testFunc){
+
+        let randCell, randRow, filteredRow = [];
+        while(filteredRow.length == 0){
+            randRow = board[getRandomIndex(0, board.length-1)];
+            filteredRow = randRow.filter((elem) => {
+                return testFunc(elem);
+            });
+    
+            randCell = filteredRow[getRandomIndex(0, filteredRow.length - 1)];
+        }
+
+        return randCell;
+    }
+
+    /**
+     * @param {*} min <int> inclusive
+     * @param {*} max <int> inclusive
+     */
+    function getRandomIndex(min, max){
+        const rand = (Math.floor(Math.random() * (max - min + 1)) + min);
+        //console.log(`Rand: ${rand} with min ${min} and max ${max}`);
+        return rand;
+    };
+
     return {
         getCellNeighborsByIndex: getCellNeighborsByIndex,
         printBoard: printBoard,
         verifyBombCount: verifyBombCount,
+        verifyClickedCellCount: verifyClickedCellCount,
         stringifyBoard: stringifyBoard,
         isBombGameCell: isBombGameCell,
         isNumberGameCell: isNumberGameCell,
         isEmptyGameCell: isEmptyGameCell,
         buildIndexKey: buildIndexKey,
         gameWon: gameWon,
+        findRandomNumberCell:findRandomNumberCell,
+        findRandomBombCell: findRandomBombCell,
+        getRandomIndex: getRandomIndex,
+        verifyClickedBombCount:verifyClickedBombCount,
     };
 }
 

@@ -70,12 +70,12 @@ function gameStateBuilder() {
             column: getBombableIndex(columns - 1, offLimitsJ),
         });
         ret.push({
-            row: getRandomIndex(0, rows - 1),
+            row: Game.getRandomIndex(0, rows - 1),
             column: getBombableIndex(columns - 1, offLimitsJ),
         });
         ret.push({
             row: getBombableIndex(rows - 1, offLimitsI),
-            column: getRandomIndex(0, columns - 1),
+            column: Game.getRandomIndex(0, columns - 1),
         });
         return ret;
     }
@@ -90,33 +90,14 @@ function gameStateBuilder() {
         const indexOptions = []; 
         let choice;    
         if((offLimits - 2) >= 0){
-            indexOptions.push(getRandomIndex(0, offLimits - 2));
+            indexOptions.push(Game.getRandomIndex(0, offLimits - 2));
         }
         if((offLimits + 2) <= max){
-            indexOptions.push(getRandomIndex(offLimits + 2, max));
+            indexOptions.push(Game.getRandomIndex(offLimits + 2, max));
         }
-        choice = indexOptions[getRandomIndex(0, indexOptions.length - 1)];
-        //console.log(`Bombable index between offlimits ${offLimits} and max ${max} : ${choice}`);
+        choice = indexOptions[Game.getRandomIndex(0, indexOptions.length - 1)];
+        
         return choice;  
-    }
-
-    /**
-     * 
-     * @param {*} min <int> inclusive
-     * @param {*} max <int> inclusive
-     */
-    function getRandomIndex(min, max){
-        const rand = (Math.floor(Math.random() * (max - min + 1)) + min);
-        //console.log(`Rand: ${rand} with min ${min} and max ${max}`);
-        return rand;
-    };
-
-    function buildNonBombGameCell(row, column, numOfBombNeighbors, isClicked){
-        return buildGameCell(row, column, numOfBombNeighbors, isClicked);
-    }
-
-    function buildBombGameCell(row, column, isClicked){
-        return buildGameCell(row, column, -1, isClicked);
     }
 
     function updateBoardForClickedGameCell(board, row, column){
@@ -125,6 +106,22 @@ function gameStateBuilder() {
         return {
             board: board,
             cellsUpdated: 1,
+        };
+    }
+
+    function updateBoardForClickedBomb(board){
+        let cellsUpdated = 0;
+        board.forEach((rowArr, i) => {
+            rowArr.forEach((elem, j) => {
+                if(Game.isBombGameCell(elem)){
+                    board[i][j] = buildClickedGameCell(board, i, j);
+                    cellsUpdated += 1;
+                }
+            });
+        });
+        return {
+            board: board,
+            cellsUpdated: cellsUpdated,
         };
     }
 
@@ -168,20 +165,17 @@ function gameStateBuilder() {
         return neighbors;
     }
 
-    function updateBoardForClickedBomb(board){
-        board.forEach((rowArr, i) => {
-            rowArr.forEach((elem, j) => {
-                if(Game.isBombGameCell(elem)){
-                    board[i][j] = buildClickedGameCell(board, i, j);
-                }
-            });
-        });
-        return board;
-    }
-
     function buildClickedGameCell(board, row, column){
         let cell = board[row][column];
         return {...cell, isClicked: true};
+    }
+
+    function buildNonBombGameCell(row, column, numOfBombNeighbors, isClicked){
+        return buildGameCell(row, column, numOfBombNeighbors, isClicked);
+    }
+
+    function buildBombGameCell(row, column, isClicked){
+        return buildGameCell(row, column, -1, isClicked);
     }
 
     /**

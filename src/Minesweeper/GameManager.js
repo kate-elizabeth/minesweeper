@@ -78,7 +78,7 @@ class GameManager extends Component {
         console.log(`Bomb cell clicked! at ${i} ${j}`);
         //first update to show the clicked bomb before the rest
         this.handleNumberCellClick(i,j);
-        const board = this.gameStateBuilder.updateBoardForClickedBomb(this.state.board);
+        const {board} = this.gameStateBuilder.updateBoardForClickedBomb(this.state.board);
         this.setState({
             board:board,
             gameStatus: GAME_STATUS.LOST,
